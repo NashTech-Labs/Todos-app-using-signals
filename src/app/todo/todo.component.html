@@ -1,0 +1,75 @@
+<h2 class="text-center">Todo Application using Signals</h2>
+<div class="offset-5 col-5">
+  <div class="d-flex">
+    <form [formGroup]="todoForm">
+      <mat-form-field class="example-full-width">
+        <mat-label>Add todo</mat-label>
+        <input matInput type="text" formControlName="addTodo" />
+      </mat-form-field>
+    </form>
+    <button
+      mat-raised-button
+      color="primary"
+      class="mx-4 mt-2"
+      (click)="addTodo()"
+    >
+      Add
+    </button>
+  </div>
+  <div
+    class="error"
+    *ngIf="
+      todoForm.controls['addTodo'].errors &&
+      todoForm.controls['addTodo'].touched
+    "
+  >
+    <small>This field is required</small>
+  </div>
+
+  <div class="col-4 mt-2">
+    <h4 class="text-bold">Todo's List</h4>
+  </div>
+  <div *ngFor="let item of state()" class="col-5">
+    <mat-card class="mt-2">
+      <mat-card-content
+        class="d-flex align-items-center justify-content-between"
+      >
+        <ng-container *ngIf="editable !== item; else edit">
+          <span>{{ item }}</span>
+          <div>
+            <mat-icon
+              aria-hidden="false"
+              class="mx-1"
+              fontIcon="edit"
+              (click)="editTodo(item)"
+            ></mat-icon>
+            <mat-icon
+              aria-hidden="false"
+              fontIcon="delete"
+              (click)="deleteTodo(item)"
+            ></mat-icon>
+          </div>
+        </ng-container>
+        <ng-template #edit>
+          <div class="d-flex justify-content-between">
+            <form [formGroup]="editTodoForm">
+              <mat-form-field class="example-full-width">
+                <mat-label>Edit todo</mat-label>
+                <input matInput type="text" formControlName="edittodo" />
+              </mat-form-field>
+            </form>
+            <mat-icon
+              aria-hidden="false"
+              fontIcon="done"
+              class="mt-3 mx-2"
+              (click)="updateTodo(item)"
+            ></mat-icon>
+          </div>
+          <div class="error" *ngIf="editTodoForm.controls['edittodo'].errors">
+            <small>This field is required</small>
+          </div>
+        </ng-template>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
